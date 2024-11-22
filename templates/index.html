@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather App</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <!-- Custom CSS -->
+  <style>
+    body {
+      background-color: #8ed2fb;
+      color: black;
+      font-family: 'Impact', sans-serif;
+    }
+
+    .navbar {
+      background-color: #010582;
+      border: none;
+    }
+
+    .navbar-brand {
+      color: white !important;
+      font-size: 35px;
+    }
+
+    .container {
+      margin-top: 50px;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #031a76;
+      font-size: 30px;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    .form-control {
+      font-size: 14px;
+    }
+
+    .btn {
+      background-color: #007bff;
+      border: none;
+      font-size: 20px;
+      padding: 8px 12px;
+      transition: all 0.3s ease;
+      
+      
+    }
+
+    .btn:hover {
+      background-color: #0056b3;
+      transform: scale(1.02);
+    }
+
+    .panel {
+      border: 1px solid #848df1;
+      border-radius: 8px;
+    }
+
+    .panel-heading {
+      background-color: #8ed2fb;
+      color: black;
+      font-size: 16px;
+      padding: 10px,12px;
+      border-radius: 8px 8px 0 0;
+    }
+
+    .panel-body p {
+      font-size: 14px;
+      margin: 6px 0;
+      font-family: Tahoma, sans-serif;
+    }
+
+    .alert {
+      font-size: 14px;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">Weather App</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1 class="text-center">Find the weather!</h1>
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        <input type="text" class="form-control" name="city" placeholder="Enter City Name" required>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Get Weather</button>
+    </form>
+
+    <br>
+
+    {% if data.city_name %}
+    <div class="panel">
+      <div class="panel-heading">
+        Weather Details for {{ data.city_name }}
+      </div>
+      <div class="panel-body">
+        <p><strong>Country Code:</strong> {{ data.country_code }}</p>
+        <p><strong>Coordinates:</strong> {{ data.coordinate }}</p>
+        <p><strong>Temperature:</strong> {{ data.temp }}</p>
+        <p><strong>Feels Like:</strong> {{ data.feels_like }}</p>
+        <p><strong>Min Temperature:</strong> {{ data.temp_min }}</p>
+        <p><strong>Max Temperature:</strong> {{ data.temp_max }}</p>
+        <p><strong>Pressure:</strong> {{ data.pressure }}</p>
+        <p><strong>Humidity:</strong> {{ data.humidity }}</p>
+        <p><strong>Weather Condition:</strong> {{ data.weather }}</p>
+        <p><strong>Description:</strong> {{ data.weather_description }}</p>
+        <p><strong>Wind Speed:</strong> {{ data.wind_speed }}</p>
+        <p><strong>Wind Direction:</strong> {{ data.wind_deg }}</p>
+        <p><strong>Cloudiness:</strong> {{ data.cloudiness }}</p>
+        <p><strong>Sunrise:</strong> {{ data.sunrise }}</p>
+        <p><strong>Sunset:</strong> {{ data.sunset }}</p>
+      </div>
+    </div>
+    {% elif data.error %}
+    <div class="alert alert-danger">
+      <strong>Error:</strong> {{ data.error }}
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- JavaScript -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</body>
+
+</html>
