@@ -30,12 +30,8 @@ def index(request):
                 "wind_speed": f"{list_of_data['wind']['speed']} m/s",
                 "wind_deg": f"{list_of_data['wind']['deg']}°",
                 "cloudiness": f"{list_of_data['clouds']['all']}%",
-                "sunrise": datetime.datetime.fromtimestamp(
-                    list_of_data['sys']['sunrise']
-                ).strftime('%H:%M:%S'),
-                "sunset": datetime.datetime.fromtimestamp(
-                    list_of_data['sys']['sunset']
-                ).strftime('%H:%M:%S'),
+                "sunrise": (datetime.datetime.fromtimestamp(list_of_data['sys']['sunrise']) + datetime.timedelta(hours=5, minutes=30)).strftime('%H:%M:%S'),
+                "sunset": (datetime.datetime.fromtimestamp(list_of_data['sys']['sunset']) + datetime.timedelta(hours=5, minutes=30)).strftime('%H:%M:%S'),
             }
         except Exception as e:
             data = {"error": "City not found. Please enter a valid city name."}
