@@ -1,145 +1,418 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Weather App</title>
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-  <!-- Custom CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
+    :root {
+      --primary-color: #007bff;
+      --secondary-color: #6c757d;
+      --success-color: #28a745;
+      --info-color: #17a2b8;
+      --warning-color: #ffc107;
+      --danger-color: #dc3545;
+      --light-color: #f8f9fa;
+      --dark-color: #343a40;
+      --white: #ffffff;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
     body {
-      background-color: #8ed2fb;
-      color: black;
-      font-family: 'Impact', 'sans-serif','optima';
+      background: linear-gradient(120deg, #f6f9fc 0%, #e9ecef 100%);
+      color: var(--dark-color);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      min-height: 100vh;
     }
 
     .navbar {
-      background-color: #010582;
-      border: none;
+      background-color: var(--primary-color);
+      padding: 1rem 0;
+      animation: fadeIn 0.5s ease-out;
     }
 
     .navbar-brand {
-      color: white !important;
-      font-size: 35px;
+      color: var(--white);
+      font-size: 2rem;
+      font-weight: 600;
+      text-decoration: none;
+      margin-left: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .navbar-brand i {
+      animation: spin 20s linear infinite;
     }
 
     .container {
-      margin-top: 50px;
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .search-container {
+      background: var(--white);
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .search-container:hover {
+      animation: pulse 2s infinite;
     }
 
     h1 {
-      color: #031a76;
-      font-size: 30px;
-      margin-bottom: 20px;
-      font-weight: 600;
+      color: var(--primary-color);
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-size: 2.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      gap: 1rem;
     }
 
     .form-control {
-      font-size: 14px;
+      flex: 1;
+      padding: 1rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary-color);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
     }
 
     .btn {
-      background-color: #007bff;
+      padding: 1rem 2rem;
+      background: var(--primary-color);
+      color: var(--white);
       border: none;
-      font-size: 20px;
-      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
       transition: all 0.3s ease;
-      
-      
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     .btn:hover {
-      background-color: #0056b3;
-      transform: scale(1.02);
+      background: #0056b3;
+      transform: translateY(-2px);
     }
 
-    .panel {
-      border: 1px solid #848df1;
+    .weather-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .weather-card {
+      background: var(--white);
+      border-radius: 15px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      animation: fadeIn 0.5s ease-out;
+      animation-fill-mode: both;
+    }
+
+    .weather-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .weather-card:nth-child(1) { animation-delay: 0.1s; }
+    .weather-card:nth-child(2) { animation-delay: 0.2s; }
+    .weather-card:nth-child(3) { animation-delay: 0.3s; }
+    .weather-card:nth-child(4) { animation-delay: 0.4s; }
+    .weather-card:nth-child(5) { animation-delay: 0.5s; }
+    .weather-card:nth-child(6) { animation-delay: 0.6s; }
+
+    .weather-card-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .weather-icon {
+      font-size: 2rem;
+      color: var(--primary-color);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .weather-card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--primary-color);
+      margin: 0;
+    }
+
+    .weather-card-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .weather-data {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      transition: all 0.3s ease;
+    }
+
+    .weather-data:hover {
+      background: rgba(0, 123, 255, 0.05);
+      padding: 0.5rem;
       border-radius: 8px;
     }
 
-    .panel-heading {
-      background-color: #8ed2fb;
-      color: black;
-      font-size: 16px;
-      padding: 10px,12px;
-      border-radius: 8px 8px 0 0;
+    .weather-label {
+      color: var(--secondary-color);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
-    .panel-body p {
-      font-size: 14px;
-      margin: 6px 0;
-      font-family: Tahoma, sans-serif;
+    .weather-value {
+      font-weight: 600;
+      color: var(--dark-color);
     }
 
     .alert {
-      font-size: 14px;
-      font-weight: bold;
+      background: var(--danger-color);
+      color: var(--white);
+      padding: 1rem;
+      border-radius: 8px;
       text-align: center;
+      margin-top: 1rem;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    /* Weather condition icons */
+    .weather-condition {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .sunrise-sunset-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1rem;
+    }
+
+    .sunrise-sunset-item {
+      text-align: center;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .sunrise-sunset-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: var(--warning-color);
     }
   </style>
 </head>
-
 <body>
   <nav class="navbar">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="#">Weather App</a>
-      </div>
-    </div>
+    <a class="navbar-brand" href="#">
+      <i class="fas fa-cloud-sun-rain"></i> 
+      Weather App
+    </a>
   </nav>
-
+  
   <div class="container">
-    <h1 class="text-center">Find the weather!</h1>
-    <form method="post">
-      {% csrf_token %}
-      <div class="form-group">
-        <input type="text" class="form-control" name="city" placeholder="Enter City Name" required>
-      </div>
-      <button type="submit" class="btn btn-primary btn-block">Get Weather</button>
-    </form>
-
-    <br>
+    <div class="search-container">
+      <h1><i class="fas fa-search-location"></i> Find Weather</h1>
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <input type="text" class="form-control" name="city" placeholder="Enter city name..." required>
+          <button type="submit" class="btn">
+            <i class="fas fa-search"></i>
+            Get Weather
+          </button>
+        </div>
+      </form>
+    </div>
 
     {% if data.city_name %}
-    <div class="panel">
-      <div class="panel-heading">
-        Weather Details for {{ data.city_name }}
+    <div class="weather-grid">
+      <!-- Main Weather Card -->
+      <div class="weather-card">
+        <div class="weather-condition">
+          <i class="fas fa-cloud"></i>
+        </div>
+        <div class="weather-card-header">
+          <i class="fas fa-temperature-high weather-icon"></i>
+          <h2 class="weather-card-title">Current Weather</h2>
+        </div>
+        <div class="weather-card-content">
+          <div class="weather-data">
+            <span class="weather-label"><i class="fas fa-thermometer-half"></i> Temperature</span>
+            <span class="weather-value">{{ data.temp }}</span>
+          </div>
+          <div class="weather-data">
+            <span class="weather-label"><i class="fas fa-temperature-low"></i> Feels Like</span>
+            <span class="weather-value">{{ data.feels_like }}</span>
+          </div>
+          <div class="weather-data">
+            <span class="weather-label"><i class="fas fa-cloud"></i> Condition</span>
+            <span class="weather-value">{{ data.weather }}</span>
+          </div>
+        </div>
       </div>
-      <div class="panel-body">
-        <p><strong>Country Code:</strong> {{ data.country_code }}</p>
-        <p><strong>Coordinates:</strong> {{ data.coordinate }}</p>
-        <p><strong>Temperature:</strong> {{ data.temp }}</p>
-        <p><strong>Feels Like:</strong> {{ data.feels_like }}</p>
-        <p><strong>Min Temperature:</strong> {{ data.temp_min }}</p>
-        <p><strong>Max Temperature:</strong> {{ data.temp_max }}</p>
-        <p><strong>Pressure:</strong> {{ data.pressure }}</p>
-        <p><strong>Humidity:</strong> {{ data.humidity }}</p>
-        <p><strong>Weather Condition:</strong> {{ data.weather }}</p>
-        <p><strong>Description:</strong> {{ data.weather_description }}</p>
-        <p><strong>Wind Speed:</strong> {{ data.wind_speed }}</p>
-        <p><strong>Wind Direction:</strong> {{ data.wind_deg }}</p>
-        <p><strong>Cloudiness:</strong> {{ data.cloudiness }}</p>
-        <p><strong>Sunrise:</strong> {{ data.sunrise }}</p>
-        <p><strong>Sunset:</strong> {{ data.sunset }}</p>
+
+      <!-- Temperature Details Card -->
+      <div class="weather-card">
+        <div class="weather-card-header">
+          <i class="fas fa-temperature-low weather-icon"></i>
+          <h2 class="weather-card-title">Temperature Range</h2>
+        </div>
+        <div class="weather-card-content">
+          <div class="weather-data">
+            <span class="weather-label"><i class="fas fa-arrow-down"></i> Min Temperature</span>
+            <span class="weather-value">{{ data.temp_min }}</span>
+          </div>
+          <div class="weather-data">
+            <span class="weather-label"><i class="fas fa-arrow-up"></i> Max Temperature</span>
+            <span class="weather-value">{{ data.temp_max }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Atmospheric Conditions Card -->
+      <div class="weather-card">
+        <div class="weather-card-header">
+          <i class="fas fa-tachometer-alt weather-icon"></i>
+          <h2 class="weather-card-title">Atmospheric Conditions</h2>
+        </div>
+        <div class="weather-card-content">
+          <div class="weather-data">
+            <span class="weather-label"><i class="fas fa-compress-alt"></i> Pressure</span>
+            <span class="weather-value">{{ data.pressure }}</span>
+          </div>
+          <div class="weather-data">
+            <span class="weather-label"><i class="fas fa-water"></i> Humidity</span>
+            <span class="weather-value">{{ data.humidity }}</span>
+          </div>
+          <div class="weather-data">
+            <span class="weather-label"><i class="fas fa-cloud"></i> Cloudiness</span>
+            <span class="weather-value">{{ data.cloudiness }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wind Information Card -->
+      <div class="weather-card">
+        <div class="weather-card-header">
+          <i class="fas fa-wind weather-icon"></i>
+          <h2 class="weather-card-title">Wind Information</h2>
+        </div>
+        <div class="weather-card-content">
+          <div class="weather-data">
+            <span class="weather-label"><i class="fas fa-running"></i> Wind Speed</span>
+            <span class="weather-value">{{ data.wind_speed }}</span>
+          </div>
+          <div class="weather-data">
+            <span class="weather-label"><i class="fas fa-compass"></i> Wind Direction</span>
+            <span class="weather-value">{{ data.wind_deg }}°</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Location Details Card -->
+      <div class="weather-card">
+        <div class="weather-card-header">
+          <i class="fas fa-map-marked-alt weather-icon"></i>
+          <h2 class="weather-card-title">Location Details</h2>
+        </div>
+        <div class="weather-card-content">
+          <div class="weather-data">
+            <span class="weather-label"><i class="fas fa-city"></i> City</span>
+            <span class="weather-value">{{ data.city_name }}</span>
+          </div>
+          <div class="weather-data">
+            <span class="weather-label"><i class="fas fa-flag"></i> Country</span>
+            <span class="weather-value">{{ data.country_code }}</span>
+          </div>
+          <div class="weather-data">
+            <span class="weather-label"><i class="fas fa-map-pin"></i> Coordinates</span>
+            <span class="weather-value">{{ data.coordinate }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sun Timing Card -->
+      <div class="weather-card">
+        <div class="weather-card-header">
+          <i class="fas fa-sun weather-icon"></i>
+          <h2 class="weather-card-title">Sun Timing</h2>
+        </div>
+        <div class="sunrise-sunset-container">
+          <div class="sunrise-sunset-item">
+            <i class="fas fa-sunrise sunrise-sunset-icon"></i>
+            <div class="weather-data">
+              <span class="weather-label">Sunrise</span>
+              <span class="weather-value">{{ data.sunrise }}</span>
+            </div>
+          </div>
+          <div class="sunrise-sunset-item">
+            <i class="fas fa-sunset sunrise-sunset-icon"></i>
+            <div class="weather-data">
+              <span class="weather-label">Sunset</span>
+              <span class="weather-value">{{ data.sunset }}</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     {% elif data.error %}
-    <div class="alert alert-danger">
+    <div class="alert">
+      <i class="fas fa-exclamation-triangle"></i>
       <strong>Error:</strong> {{ data.error }}
     </div>
     {% endif %}
   </div>
-
-  <!-- JavaScript -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 </body>
-
 </html>
