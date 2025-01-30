@@ -5,17 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Weather App</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary-color: #007bff;
-      --secondary-color: #6c757d;
-      --success-color: #28a745;
-      --info-color: #17a2b8;
-      --warning-color: #ffc107;
-      --danger-color: #dc3545;
-      --light-color: #f8f9fa;
-      --dark-color: #343a40;
-      --white: #ffffff;
+      --primary-color: #ff6f61;
+      --secondary-color: #ffcc00;
+      --background-gradient: linear-gradient(135deg, #1e1e2f, #2a2a40);
+      --card-background: rgba(255, 255, 255, 0.1);
+      --text-color: #ffffff;
+      --shadow-color: rgba(0, 0, 0, 0.3);
     }
 
     @keyframes fadeIn {
@@ -25,44 +23,42 @@
 
     @keyframes float {
       0% { transform: translateY(0px); }
-      50% { transform: translateY(-5px); }
+      50% { transform: translateY(-10px); }
       100% { transform: translateY(0px); }
     }
 
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
+    @keyframes glow {
+      0% { text-shadow: 0 0 5px var(--primary-color); }
+      50% { text-shadow: 0 0 20px var(--primary-color); }
+      100% { text-shadow: 0 0 5px var(--primary-color); }
     }
 
     body {
-      background: linear-gradient(120deg, #f6f9fc 0%, #e9ecef 100%);
-      color: var(--dark-color);
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--background-gradient);
+      color: var(--text-color);
+      font-family: 'Roboto', sans-serif;
       margin: 0;
       min-height: 100vh;
+      line-height: 1.6;
     }
 
     .navbar {
-      background-color: var(--primary-color);
+      background: rgba(0, 0, 0, 0.5);
       padding: 1rem 0;
       animation: fadeIn 0.5s ease-out;
     }
 
     .navbar-brand {
-      color: var(--white);
-      font-size: 1.5rem;
-      font-weight: 600;
+      color: var(--text-color);
+      font-size: 1.8rem;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
       text-decoration: none;
       margin-left: 1rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      animation: glow 3s infinite;
     }
 
     .navbar-brand i {
@@ -76,23 +72,22 @@
     }
 
     .search-container {
-      background: var(--white);
+      background: var(--card-background);
       padding: 1.5rem;
       border-radius: 15px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 8px 32px var(--shadow-color);
       margin-bottom: 2rem;
       animation: fadeIn 0.5s ease-out;
-    }
-
-    .search-container:hover {
-      animation: pulse 2s infinite;
+      backdrop-filter: blur(10px);
     }
 
     h1 {
       color: var(--primary-color);
       text-align: center;
       margin-bottom: 1.5rem;
-      font-size: 2rem;
+      font-size: 2.5rem;
+      font-family: 'Orbitron', sans-serif;
+      animation: glow 3s infinite;
     }
 
     .form-group {
@@ -104,22 +99,24 @@
     .form-control {
       flex: 1;
       padding: 1rem;
-      border: 2px solid #e0e0e0;
+      border: 2px solid rgba(255, 255, 255, 0.2);
       border-radius: 8px;
       font-size: 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-color);
       transition: all 0.3s ease;
     }
 
     .form-control:focus {
       border-color: var(--primary-color);
       outline: none;
-      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+      box-shadow: 0 0 0 3px rgba(255, 111, 97, 0.25);
     }
 
     .btn {
       padding: 1rem;
       background: var(--primary-color);
-      color: var(--white);
+      color: var(--text-color);
       border: none;
       border-radius: 8px;
       font-size: 1rem;
@@ -132,7 +129,7 @@
     }
 
     .btn:hover {
-      background: #0056b3;
+      background: #ff4a3d;
       transform: translateY(-2px);
     }
 
@@ -144,26 +141,19 @@
     }
 
     .weather-card {
-      background: var(--white);
+      background: var(--card-background);
       border-radius: 15px;
       padding: 1.5rem;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 6px var(--shadow-color);
       transition: all 0.3s ease;
       animation: fadeIn 0.5s ease-out;
-      animation-fill-mode: both;
+      backdrop-filter: blur(10px);
     }
 
     .weather-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 8px 15px var(--shadow-color);
     }
-
-    .weather-card:nth-child(1) { animation-delay: 0.1s; }
-    .weather-card:nth-child(2) { animation-delay: 0.2s; }
-    .weather-card:nth-child(3) { animation-delay: 0.3s; }
-    .weather-card:nth-child(4) { animation-delay: 0.4s; }
-    .weather-card:nth-child(5) { animation-delay: 0.5s; }
-    .weather-card:nth-child(6) { animation-delay: 0.6s; }
 
     .weather-card-header {
       display: flex;
@@ -171,7 +161,7 @@
       gap: 1rem;
       margin-bottom: 1rem;
       padding-bottom: 1rem;
-      border-bottom: 1px solid #e0e0e0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     .weather-icon {
@@ -181,10 +171,11 @@
     }
 
     .weather-card-title {
-      font-size: 1.25rem;
+      font-size: 1.5rem;
       font-weight: 600;
       color: var(--primary-color);
       margin: 0;
+      font-family: 'Orbitron', sans-serif;
     }
 
     .weather-card-content {
@@ -202,7 +193,7 @@
     }
 
     .weather-data:hover {
-      background: rgba(0, 123, 255, 0.05);
+      background: rgba(255, 111, 97, 0.1);
       padding: 0.5rem;
       border-radius: 8px;
     }
@@ -217,12 +208,12 @@
 
     .weather-value {
       font-weight: 600;
-      color: var(--dark-color);
+      color: var(--text-color);
     }
 
     .alert {
       background: var(--danger-color);
-      color: var(--white);
+      color: var(--text-color);
       padding: 1rem;
       border-radius: 8px;
       text-align: center;
@@ -232,7 +223,7 @@
 
     /* Weather condition icons */
     .weather-condition {
-      font-size: 2.5rem;
+      font-size: 3rem;
       margin-bottom: 1rem;
       animation: float 3s ease-in-out infinite;
     }
@@ -251,17 +242,17 @@
     .sunrise-sunset-icon {
       font-size: 2rem;
       margin-bottom: 0.5rem;
-      color: var(--warning-color);
+      color: var(--secondary-color);
     }
 
     /* Responsive adjustments */
     @media (max-width: 768px) {
       .navbar-brand {
-        font-size: 1.25rem;
+        font-size: 1.5rem;
       }
 
       h1 {
-        font-size: 1.75rem;
+        font-size: 2rem;
       }
 
       .form-group {
@@ -285,7 +276,7 @@
       }
 
       .weather-card-title {
-        font-size: 1.1rem;
+        font-size: 1.25rem;
       }
 
       .weather-condition {
@@ -295,11 +286,11 @@
 
     @media (max-width: 480px) {
       .navbar-brand {
-        font-size: 1rem;
+        font-size: 1.25rem;
       }
 
       h1 {
-        font-size: 1.5rem;
+        font-size: 1.75rem;
       }
 
       .weather-card-header {
@@ -474,6 +465,38 @@
               <span class="weather-label">Sunset</span>
               <span class="weather-value">{{ data.sunset }}</span>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Visibility Card -->
+      <div class="weather-card">
+        <div class="weather-card-header">
+          <i class="fas fa-eye weather-icon"></i>
+          <h2 class="weather-card-title">Visibility</h2>
+        </div>
+        <div class="weather-card-content">
+          <div class="weather-data">
+            <span class="weather-label"><i class="fas fa-eye"></i> Visibility</span>
+            <span class="weather-value">{{ data.visibility }} meters</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Precipitation Card -->
+      <div class="weather-card">
+        <div class="weather-card-header">
+          <i class="fas fa-cloud-rain weather-icon"></i>
+          <h2 class="weather-card-title">Precipitation</h2>
+        </div>
+        <div class="weather-card-content">
+          <div class="weather-data">
+            <span class="weather-label"><i class="fas fa-tint"></i> Rain Volume</span>
+            <span class="weather-value">{{ data.rain }} mm</span>
+          </div>
+          <div class="weather-data">
+            <span class="weather-label"><i class="fas fa-snowflake"></i> Snow Volume</span>
+            <span class="weather-value">{{ data.snow }} mm</span>
           </div>
         </div>
       </div>
